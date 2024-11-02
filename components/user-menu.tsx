@@ -38,7 +38,7 @@ interface IUserMenu {
 
 const LoginButton = ({ className }: IUserMenu) => {
     return (
-        <Link href={"/sign-in"} className={className}>
+        <Link href={""} className={className}>
             <Button variant={"outline"} size={"default"}>
                 Sign In
             </Button>
@@ -48,7 +48,7 @@ const LoginButton = ({ className }: IUserMenu) => {
 
 const UploadButton = ({ className }: IUserMenu) => {
     return (
-        <Link href={"/upload"} className={className}>
+        <Link href={""} className={className}>
             <Button variant={"default"} size={"default"}>
                 Upload <Upload />
             </Button>
