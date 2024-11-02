@@ -8,11 +8,11 @@ import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
-interface IBlurImageProps {
+interface IGalleryImageProps {
     initialImages: TImage[];
 }
 
-const BlurImage = ({ initialImages }: IBlurImageProps) => {
+const GalleryImage = ({ initialImages }: IGalleryImageProps) => {
     const [images, setImages] = useState<TImage[]>(initialImages);
     const [isLoading, setLoading] = useState<boolean>(false);
     const [page, setPage] = useState<number>(2);
@@ -85,7 +85,7 @@ const BlurImage = ({ initialImages }: IBlurImageProps) => {
                         <h3 className="mt-4 text-sm text-primary">
                             {image.user.name}
                         </h3>
-                        <p className="mt-1 text-lg font-medium text-primary-secondary">
+                        <p className="mt-1 text-lg font-medium ">
                             @{image.user.username}
                         </p>
                     </Link>
@@ -102,4 +102,5 @@ const BlurImage = ({ initialImages }: IBlurImageProps) => {
     );
 };
 
-export default BlurImage;
+GalleryImage.displayName = "GalleryImage";
+export { GalleryImage };

@@ -1,9 +1,30 @@
+import Image from "next/image";
 import Link from "next/link";
+import LogoImage from "../assets/logo/icons8-image-arcade-96.png";
+import { cn } from "@/lib/utils";
 
-const MainLogo = () => {
+interface IMainLogo {
+    className: string;
+}
+
+const MainLogo = ({ className }: IMainLogo) => {
     return (
-        <Link href="/" className="text-2xl font-medium text-primary">
-            <span className="font-bold">Gallery Image</span>
+        <Link
+            href="/"
+            className={cn(
+                "text-primary text-4xl font-bold flex items-center",
+                className
+            )}
+        >
+            <Image
+                className="size-10 mr-1"
+                src={LogoImage}
+                alt="logo"
+                priority
+            />
+            <p className="font-semibold">
+                <strong className="text-foreground">9</strong>Image
+            </p>
         </Link>
     );
 };

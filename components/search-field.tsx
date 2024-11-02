@@ -1,11 +1,15 @@
 "use client";
 
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import { SearchIcon } from "lucide-react";
-
 import { useRouter } from "next/navigation";
 
-const SearchField = () => {
+interface ISearchField {
+    className: string;
+}
+
+const SearchField = ({ className }: ISearchField) => {
     const router = useRouter();
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -19,7 +23,7 @@ const SearchField = () => {
 
     return (
         <form onSubmit={handleSubmit} method="GET" action={"/search"}>
-            <div className="relative">
+            <div className={cn("relative", className)}>
                 <Input
                     name="q"
                     placeholder={"Search image..."}

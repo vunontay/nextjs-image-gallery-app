@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -18,10 +19,12 @@ import { cn } from "@/lib/utils";
 import {
     Check,
     LogOutIcon,
+    Menu,
     Monitor,
     Moon,
     Palette,
     Sun,
+    Upload,
     UserIcon,
 } from "lucide-react";
 
@@ -29,11 +32,39 @@ import { useTheme } from "next-themes";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-interface IUserButton {
+interface IUserMenu {
     className?: string;
 }
 
-const UserButton = ({ className }: IUserButton) => {
+const LoginButton = ({ className }: IUserMenu) => {
+    return (
+        <Link href={"/sign-in"} className={className}>
+            <Button variant={"outline"} size={"default"}>
+                Sign In
+            </Button>
+        </Link>
+    );
+};
+
+const UploadButton = ({ className }: IUserMenu) => {
+    return (
+        <Link href={"/upload"} className={className}>
+            <Button variant={"default"} size={"default"}>
+                Upload <Upload />
+            </Button>
+        </Link>
+    );
+};
+
+const MenubarButton = ({ className }: IUserMenu) => {
+    return (
+        <Button className={className} variant={"outline"} size={"icon"}>
+            <Menu />
+        </Button>
+    );
+};
+
+const UserButton = ({ className }: IUserMenu) => {
     const { theme, setTheme } = useTheme();
 
     const router = useRouter();
@@ -130,5 +161,7 @@ const UserButton = ({ className }: IUserButton) => {
 };
 
 UserButton.displayName = "UserButton";
-
-export { UserButton };
+LoginButton.displayName = "LoginButton";
+UploadButton.displayName = "UploadButton";
+MenubarButton.displayName = "MenubarButton";
+export { UserButton, LoginButton, UploadButton, MenubarButton };

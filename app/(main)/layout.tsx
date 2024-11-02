@@ -8,7 +8,7 @@ export default async function MainLayout({
     return (
         <>
             <Navbar />
-            <main className=" mx-auto max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-6xl lg:px-8">
+            <main className=" container mx-auto px-4 sm:px-8 py-2 sm:py-4 ">
                 {children}
             </main>
         </>
