@@ -19,6 +19,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 
 const SearchForm = () => {
     const form = useForm<SearchFormData>({
@@ -56,8 +57,13 @@ const SearchForm = () => {
                             </FormItem>
                         )}
                     />
-
-                    <SearchIcon className="absolute right-3 top-1/2 size-5 -translate-y-1/2 transform text-muted-foreground" />
+                    <Button
+                        type="submit"
+                        variant={"default"}
+                        className="absolute right-2 top-1/2 w-10 h-8 -translate-y-1/2 transform rounded-sm"
+                    >
+                        <SearchIcon />
+                    </Button>
                 </div>
                 <FormField
                     control={form.control}
@@ -69,7 +75,7 @@ const SearchForm = () => {
                                 defaultValue={field.value}
                             >
                                 <FormControl>
-                                    <SelectTrigger className="min-w-28">
+                                    <SelectTrigger className="min-w-28 text-sm font-medium">
                                         <SelectValue placeholder="Search type" />
                                     </SelectTrigger>
                                 </FormControl>

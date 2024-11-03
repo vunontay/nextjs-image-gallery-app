@@ -5,6 +5,12 @@ const searchSchema = z.object({
     type: z.enum(["photos", "collections", "users"]),
 });
 
-export type SearchFormData = z.infer<typeof searchSchema>;
+const orderSchema = z.object({
+    value: z.enum(["latest", "oldest", "popular", "views", "downloads"]),
+    param: z.enum(["latest", "oldest", "popular", "views", "downloads"]),
+    label: z.string(),
+});
 
-export { searchSchema };
+export type SearchFormData = z.infer<typeof searchSchema>;
+export type OrderData = z.infer<typeof orderSchema>;
+export { searchSchema, orderSchema };

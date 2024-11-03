@@ -3,10 +3,13 @@ import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
     try {
-        const { searchParams } = new URL(request.url);
+        const { searchParams } = await new URL(request.url);
         const page = searchParams.get("page") || "1";
-
-        const images = await fetchUnsplashImages(Number(page));
+        const order_by = searchParams.get("order");
+        const images = await fetchUnsplashImages(
+            Number(page),
+            order_by?.toString()
+        );
 
         return NextResponse.json(images);
     } catch (error) {

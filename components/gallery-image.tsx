@@ -5,6 +5,7 @@ import { Spinner } from "@/components/spinner";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import { useInView } from "react-intersection-observer";
 
@@ -17,7 +18,10 @@ const GalleryImage = ({ initialImages }: IGalleryImageProps) => {
     const [isLoading, setLoading] = useState<boolean>(false);
     const [page, setPage] = useState<number>(2);
     const [hasMore, setHasMore] = useState<boolean>(true);
+    const searchParams = useSearchParams();
 
+    // Get the current 'order' parameter from the URL
+    const currentParam = searchParams.get("order") || "latest";
     // Sử dụng react-intersection-observer
     const { ref, inView } = useInView({
         threshold: 0.1, // Khi 10% phần tử vào viewport
@@ -28,7 +32,9 @@ const GalleryImage = ({ initialImages }: IGalleryImageProps) => {
 
         setLoading(true);
         try {
-            const response = await fetch(`/api/images?page=${page}`);
+            const response = await fetch(
+                `/api/images?page=${page}&order=${currentParam}`
+            );
             const newImages: TImage[] = await response.json();
 
             if (newImages.length === 0) {
@@ -57,7 +63,7 @@ const GalleryImage = ({ initialImages }: IGalleryImageProps) => {
             <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
                 {images.map((image, index) => (
                     <Link
-                        key={image.id}
+                        key={index}
                         href={image.links.html}
                         target="_blank"
                         rel="noopener noreferrer"
