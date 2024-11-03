@@ -10,7 +10,7 @@ import { OrderButton } from "@/components/order-button";
 export default async function Home({
     searchParams,
 }: {
-    searchParams: { order?: string };
+    searchParams: Promise<{ order?: string }>;
 }) {
     const params = await Promise.resolve(searchParams);
     const initialImages = await fetchUnsplashImages(
