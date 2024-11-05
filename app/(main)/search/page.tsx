@@ -1,12 +1,14 @@
 import { getSearchResults } from "@/app/(main)/search/actions";
 
+type SearchParams = { [key: string]: string | string[] | undefined };
+
 export default async function SearchPage({
     searchParams,
 }: {
-    searchParams: { [key: string]: string | string[] | undefined };
+    searchParams: Promise<SearchParams>;
 }) {
-    const results = await getSearchResults(searchParams.query);
+    const params = await searchParams;
+    const results = await getSearchResults(params.query || "");
 
-    console.log(results);
     return <div>{results[0]?.imageUrl}</div>;
 }
