@@ -1,17 +1,10 @@
-"use client";
-
-import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormMessage,
-} from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SearchFormData, searchSchema } from "@/schemas/search-schema";
 import { Input } from "@/components/ui/input";
-import { SearchIcon } from "lucide-react";
+import {
+    FolderClosed,
+    Image as ImageIcon,
+    SearchIcon,
+    SquareUserRound,
+} from "lucide-react";
 import {
     Select,
     SelectContent,
@@ -20,83 +13,63 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import Form from "next/form";
+import { cn } from "@/lib/utils";
 
-const SearchForm = () => {
-    const form = useForm<SearchFormData>({
-        resolver: zodResolver(searchSchema),
-        defaultValues: {
-            query: "",
-            type: "photos",
-        },
-    });
+interface ISearchForm {
+    className?: string;
+}
 
-    const handleSubmit = (data: SearchFormData) => {
-        console.log(data);
-    };
-
+const SearchForm = ({ className }: ISearchForm) => {
     return (
-        <Form {...form}>
-            <form
-                onSubmit={form.handleSubmit(handleSubmit)}
-                className=" flex items-center gap-2 pb-10"
-            >
+        <Form action="/search">
+            <div className={cn("flex items-center", className)}>
+                <div>
+                    <Select name="type" defaultValue="photos">
+                        <SelectTrigger className="min-w-36 text-sm font-medium border-r rounded-r-none focus:ring-0 focus:ring-offset-0">
+                            <SelectValue placeholder="Search type" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="photos">
+                                <div className="flex items-center gap-2">
+                                    <ImageIcon className="w-4 h-4" />
+                                    <span>Photos</span>
+                                </div>
+                            </SelectItem>
+                            <SelectItem value="collections">
+                                <div className="flex items-center gap-2">
+                                    <FolderClosed className="w-4 h-4" />
+                                    <span>Collections</span>
+                                </div>
+                            </SelectItem>
+                            <SelectItem value="users">
+                                <div className="flex items-center gap-2">
+                                    <SquareUserRound className="w-4 h-4" />
+                                    <span>Users</span>
+                                </div>
+                            </SelectItem>
+                        </SelectContent>
+                    </Select>
+                </div>
                 <div className="relative">
-                    <FormField
-                        control={form.control}
+                    <Input
                         name="query"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormControl>
-                                    <Input
-                                        {...field}
-                                        placeholder="Search for images..."
-                                        className="pe-10"
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
+                        placeholder="Search image..."
+                        className="pe-10 border-l-0 rounded-l-none focus:ring-0 focus:ring-offset-0 focus-visible:ring-0 focus-visible:ring-offset-0"
                     />
                     <Button
                         type="submit"
-                        variant={"default"}
+                        variant="default"
                         className="absolute right-2 top-1/2 w-10 h-8 -translate-y-1/2 transform rounded-sm"
                     >
                         <SearchIcon />
                     </Button>
                 </div>
-                <FormField
-                    control={form.control}
-                    name="type"
-                    render={({ field }) => (
-                        <FormItem>
-                            <Select
-                                onValueChange={field.onChange}
-                                defaultValue={field.value}
-                            >
-                                <FormControl>
-                                    <SelectTrigger className="min-w-28 text-sm font-medium">
-                                        <SelectValue placeholder="Search type" />
-                                    </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                    <SelectItem value="photos">
-                                        Photos
-                                    </SelectItem>
-                                    <SelectItem value="collections">
-                                        Collections
-                                    </SelectItem>
-                                    <SelectItem value="users">Users</SelectItem>
-                                </SelectContent>
-                            </Select>
-                            <FormMessage />
-                        </FormItem>
-                    )}
-                />
-            </form>
+            </div>
         </Form>
     );
 };
+
 SearchForm.displayName = "SearchForm";
 
 export { SearchForm };

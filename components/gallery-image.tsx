@@ -1,30 +1,31 @@
 "use client";
 
 import { TImage } from "@/app/types/image-type";
+import { CardImage } from "@/components/card-image";
 import { Spinner } from "@/components/spinner";
-import { cn } from "@/lib/utils";
-import Image from "next/image";
-import Link from "next/link";
+
 import { useSearchParams } from "next/navigation";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useInView } from "react-intersection-observer";
 
 interface IGalleryImageProps {
     initialImages: TImage[];
 }
 
-const GalleryImage = ({ initialImages }: IGalleryImageProps) => {
+const GalleryImage = (
+    { initialImages }: IGalleryImageProps = { initialImages: [] }
+) => {
     const [images, setImages] = useState<TImage[]>(initialImages);
     const [isLoading, setLoading] = useState<boolean>(false);
     const [page, setPage] = useState<number>(2);
     const [hasMore, setHasMore] = useState<boolean>(true);
+    const [columns, setColumns] = useState<number>(4);
     const searchParams = useSearchParams();
+    const galleryRef = useRef<HTMLDivElement>(null);
 
-    // Get the current 'order' parameter from the URL
     const currentParam = searchParams.get("order") || "latest";
-    // Sử dụng react-intersection-observer
     const { ref, inView } = useInView({
-        threshold: 0.1, // Khi 10% phần tử vào viewport
+        threshold: 0.1,
     });
 
     const loadMoreImages = async () => {
@@ -50,7 +51,6 @@ const GalleryImage = ({ initialImages }: IGalleryImageProps) => {
         }
     };
 
-    // Trigger load more khi cuộn đến phần tử cuối
     useEffect(() => {
         if (inView && hasMore) {
             loadMoreImages();
@@ -58,49 +58,54 @@ const GalleryImage = ({ initialImages }: IGalleryImageProps) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [inView, hasMore]);
 
+    useEffect(() => {
+        const updateColumns = () => {
+            const width = galleryRef.current?.offsetWidth || window.innerWidth;
+            if (width < 640) setColumns(2);
+            else if (width < 1024) setColumns(3);
+            else if (width < 1280) setColumns(4);
+            else setColumns(5);
+        };
+
+        updateColumns();
+        window.addEventListener("resize", updateColumns);
+        return () => window.removeEventListener("resize", updateColumns);
+    }, []);
+
     return (
-        <div>
-            <div className="grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 xl:gap-x-8">
-                {images.map((image, index) => (
-                    <Link
-                        key={index}
-                        href={image.links.html}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="group"
+        <div className="container mx-auto" ref={galleryRef}>
+            <div
+                className="grid gap-4"
+                style={{
+                    gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+                    gridAutoRows: "10px",
+                }}
+            >
+                {images.map((image) => (
+                    <div
+                        key={image.id}
+                        style={{
+                            gridRowEnd: `span ${Math.ceil(
+                                image.height / (image.width / 250) / 14
+                            )}`,
+                        }}
                     >
-                        <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg bg-gray-200">
-                            <Image
-                                alt={
-                                    image.alt_description ||
-                                    "Image from Unsplash"
-                                }
-                                src={image.urls.small}
-                                fill
-                                className={cn(
-                                    "duration-700 ease-in-out group-hover:opacity-75",
-                                    isLoading
-                                        ? "scale-110 blur-2xl grayscale"
-                                        : "scale-100 blur-0 grayscale-0"
-                                )}
-                                onLoad={() => setLoading(false)}
-                                priority={index < 4}
-                                sizes="(max-width: 640px) 100vw, 50vw"
-                            />
-                        </div>
-                        <h3 className="mt-4 text-sm text-primary">
-                            {image.user.name}
-                        </h3>
-                        <p className="mt-1 text-lg font-medium ">
-                            @{image.user.username}
-                        </p>
-                    </Link>
+                        <CardImage
+                            image={image}
+                            onAddToCollection={() =>
+                                console.log(`Add ${image.id} to collection`)
+                            }
+                            onAddToWishlist={() =>
+                                console.log(`Add ${image.id} to wishlist`)
+                            }
+                            isLoading={isLoading}
+                        />
+                    </div>
                 ))}
             </div>
 
-            {/* Phần tử cuối để detect khi cuộn đến */}
             {hasMore && (
-                <div ref={ref} className="mt-10">
+                <div ref={ref} className="mt-10 flex justify-center">
                     {isLoading && <Spinner />}
                 </div>
             )}

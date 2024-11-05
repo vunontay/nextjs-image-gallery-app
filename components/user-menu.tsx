@@ -1,5 +1,8 @@
 "use client";
 
+import { SearchForm } from "@/app/(main)/_components/search-form";
+import { MainLogo } from "@/components/logo";
+import { H3 } from "@/components/title";
 import { Button } from "@/components/ui/button";
 import {
     DropdownMenu,
@@ -13,6 +16,13 @@ import {
     DropdownMenuSubTrigger,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+} from "@/components/ui/sheet";
 import { UserAvatar } from "@/components/user-avatar";
 
 import { cn } from "@/lib/utils";
@@ -29,8 +39,8 @@ import {
 } from "lucide-react";
 
 import { useTheme } from "next-themes";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface IUserMenu {
     className?: string;
@@ -58,9 +68,40 @@ const UploadButton = ({ className }: IUserMenu) => {
 
 const MenubarButton = ({ className }: IUserMenu) => {
     return (
-        <Button className={className} variant={"outline"} size={"icon"}>
-            <Menu />
-        </Button>
+        <>
+            <Sheet>
+                <SheetTrigger asChild>
+                    <Button
+                        className={className}
+                        variant={"outline"}
+                        size={"icon"}
+                    >
+                        <Menu />
+                    </Button>
+                </SheetTrigger>
+                <SheetContent side={"left"} className="w-[400px] sm:w-[540px]">
+                    <SheetHeader>
+                        <SheetTitle className="border-b pb-2">
+                            <MainLogo className="" />
+                        </SheetTitle>
+                    </SheetHeader>
+                    <div className="h-full">
+                        <H3
+                            title="Search for free photos"
+                            className="text-xl font-semibold py-2 mt-4 text-center"
+                        />
+                        <SearchForm />
+
+                        <div className="absolute w-full bottom-4 px-6 pt-2 left-0 border-t">
+                            <div className="flex items-center justify-end gap-2 sm:gap-2">
+                                <LoginButton />
+                                <UploadButton />
+                            </div>
+                        </div>
+                    </div>
+                </SheetContent>
+            </Sheet>
+        </>
     );
 };
 

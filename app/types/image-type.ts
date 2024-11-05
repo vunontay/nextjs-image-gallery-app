@@ -14,4 +14,5 @@ export type TImage = {
         name: string;
         username: string;
     };
+    blur_hash: string;
 };

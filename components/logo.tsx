@@ -12,7 +12,7 @@ const MainLogo = ({ className }: IMainLogo) => {
         <Link
             href="/"
             className={cn(
-                "text-primary text-4xl font-bold flex items-center",
+                "text-primary text-2xl lg:text-4xl font-bold flex items-center",
                 className
             )}
         >
